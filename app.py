@@ -110,20 +110,29 @@ def edison():
         logger.info('ReAct agent response: %s', agent_response)
 
         # Extract retrieved information from agent response
-        # Note: We may need to adjust this based on how the agent formats responses
         retrieved_qa_pairs = 'none'
         retrieved_docs_hybrid = 'none'
         retrieved_docs_manual = 'none'
         problem_list_manual = 'none'
         selected_doc_manual = 'none'
 
-        # Regular expressions to extract tool outputs from agent response
+        # Parse agent response to determine which dummy tools were used
         if "Retrieved historical QA" in agent_response:
             retrieved_qa_pairs = agent_response
         if "Retrieved course documents" in agent_response:
             retrieved_docs_hybrid = agent_response
         if "Retrieved homework-related content" in agent_response:
             retrieved_docs_manual = agent_response
+        if "Retrieved logistics information" in agent_response:
+            # Use retrieved_docs_hybrid for logistics too since that's what the original code does
+            retrieved_docs_hybrid = agent_response
+        if "Retrieved OCR content" in agent_response:
+            # We don't have a specific variable for OCR content in the original code,
+            # but we can add the information to the retrieved_docs_manual
+            if retrieved_docs_manual == 'none':
+                retrieved_docs_manual = agent_response
+            else:
+                retrieved_docs_manual += "\n\n" + agent_response
     else:
         # Fallback to existing retrieval methods if agent isn't initialized
         # QA retrieval
@@ -245,8 +254,6 @@ def edison():
         reply_to_ed(course=course, id=input_dict.get('comment_id'), text='edison'+response, post_answer=False, private=True)
 
     return jsonify(output_dict)
-
-
 
 @app.route('/public', methods=['POST'])
 def public_edison():
