@@ -84,15 +84,6 @@ class EdisonReActAgent:
 
     def process_query(self, query: str, context: Dict[str, Any] = None) -> str:
         """Process a query using the ReAct agent with optional context."""
-        # Create a system prompt to guide tool selection
-        # system_prompt = """You are Edison, an educational assistant. Based on the category and content of the question, choose the appropriate tools:
-        # - Use ocr_retrieval for processing images and diagrams
-        # - Use qa_retrieval for finding similar past questions and answers
-        # - Use textbook_retrieval for lecture and textbook material lookups
-        # - Use hw_retrieval for homework, project, assignment, or worksheet specific questions
-        # - Use logistics_retrieval for course logistics, deadlines, or policy questions
-
-        # You can use multiple tools if needed to give a complete response."""
 
         # Format the query with context
         formatted_query = query
